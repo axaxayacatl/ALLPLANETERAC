@@ -17,6 +17,30 @@
 <div class="content"><section class="masthead"><div><div class="eyebrow">ALL PLANETERAC / WORLD ENGINE</div><h1>PLANET<span>ERAC</span></h1><div class="jp">惑星系を設計する。／ DESIGN A SOLAR SYSTEM.</div></div><div class="mast-right"><strong id="systemCode">AP—001</strong><small>星系識別番号 / SYSTEM ID<br><span id="dateStamp">LOCAL CARTOGRAPHY</span></small></div></section>
 <section class="workbench" id="mapSection"><div class="panel map-panel"><div class="panelhead"><span>ORBITAL CARTOGRAPHY　/　軌道地図</span><b id="mapScale">MAP 01 : 1 AU</b></div><div class="map-topline"><span><strong>● LIVE MAP</strong>　CLICK A BODY TO INSPECT</span><span id="mapCoord">SECTOR 00 / 00</span></div><div class="map-stage"><svg id="orbitSvg" viewBox="0 0 720 620" role="img" aria-label="Interactive solar system map"></svg></div><div class="map-foot"><span>PLANETARY POSITIONS ARE SCHEMATIC</span><span>軌道データ / <b id="bodyCountFoot">05 BODIES</b></span></div></div>
 <div class="panel tools"><div class="panelhead"><span>BODY CONFIGURATION　/　天体設定</span><b id="editMode">SELECTED: 03</b></div><div class="inspector"><div class="field full"><label for="bodyName">Celestial name / 天体名</label><input id="bodyName" maxlength="40" value="KASUMI-III" placeholder="e.g. KASUMI-III"></div><div class="field"><label for="bodyKind">Classification / 分類</label><select id="bodyKind"><option value="Terrestrial">Terrestrial / 岩石惑星</option><option value="Gas giant">Gas giant / 巨大ガス惑星</option><option value="Ice world">Ice world / 氷惑星</option><option value="Ocean world">Ocean world / 海洋惑星</option><option value="Artificial">Artificial / 人工天体</option><option value="Dwarf planet">Dwarf planet / 準惑星</option><option value="Star">Star / 恒星</option><option value="Moon">Moon / 衛星</option></select></div><div class="field"><label for="bodyOrbit">Orbit radius / 軌道半径</label><div class="value-line"><span>0.2—8.0 AU</span><output id="orbitOut">3.0 AU</output></div><input id="bodyOrbit" type="range" min="0.2" max="8" step="0.1" value="3"></div><div class="field"><label for="bodySize">Body diameter / 直径</label><div class="value-line"><span>0.3—4.0 R⊕</span><output id="sizeOut">1.0 R⊕</output></div><input id="bodySize" type="range" min="0.3" max="4" step="0.1" value="1"></div><div class="field"><label for="bodyTemp">Surface temp. / 表面温度</label><input id="bodyTemp" type="number" min="-270" max="2000" value="18"></div><div class="field"><label for="bodyMoons">Moons / 衛星数</label><input id="bodyMoons" type="number" min="0" max="99" value="2"></div><div class="field full"><label for="bodyDescription">Field notes / 観測記録</label><textarea id="bodyDescription" maxlength="500" placeholder="Atmosphere, biosphere, culture, ruins, hazards…">Temperate frontier world. Thin cloud bands, shallow pink seas, abandoned orbital infrastructure.</textarea></div><div class="field full"><label>Surface signature / 表面色</label><div class="swatchrow" id="swatches"><button class="swatch active" data-color="#ff174c" style="background:#ff174c" aria-label="Neon red"></button><button class="swatch" data-color="#f4bfd4" style="background:#f4bfd4" aria-label="Baby pink"></button><button class="swatch" data-color="#d9d5ff" style="background:#d9d5ff" aria-label="Lavender"></button><button class="swatch" data-color="#b8d9d0" style="background:#b8d9d0" aria-label="Sea glass"></button><button class="swatch" data-color="#f4dba7" style="background:#f4dba7" aria-label="Sand"></button><button class="swatch" data-color="#a6a8b2" style="background:#a6a8b2" aria-label="Ash"></button></div></div><div class="inspector-actions"><button class="btn primary" id="saveBody">SAVE BODY / 保存</button><button class="btn" id="addBody">＋ ADD BODY / 追加</button><button class="btn" id="deleteBody">DELETE / 削除</button><button class="btn" id="randomize">GENERATE / 生成</button></div></div></div></section>
+
+<section class="panel chaptgpt-panel" style="margin-top:12px;">
+  <div class="panelhead">
+    <span>CHAPTGPT / SAKURA FESTIVAL AMONG THE STARS</span>
+    <b>IMAGEKA / 01</b>
+  </div>
+  <a
+    href="https://raw.githubusercontent.com/axaxayacatl/ALLPLANETERAC/refs/heads/main/chaptgpt_allplaneterac/Sakura%20Festival%20Among%20the%20Stars.png"
+    target="_blank"
+    rel="noopener"
+    style="display:block;background:#fff5f8;"
+  >
+    <img
+      src="https://raw.githubusercontent.com/axaxayacatl/ALLPLANETERAC/refs/heads/main/chaptgpt_allplaneterac/Sakura%20Festival%20Among%20the%20Stars.png"
+      alt="Sakura Festival Among the Stars — CHAPTGPT"
+      loading="lazy"
+      style="display:block;width:100%;height:auto;max-height:700px;object-fit:contain;"
+    >
+  </a>
+  <div style="padding:10px 14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:9px;letter-spacing:.08em;color:#a27a89;">
+    <span>SAKURA FESTIVAL AMONG THE STARS</span>
+    <span style="color:#ff174c;">CHAPTGPT / IMAGE ARCHIVE</span>
+  </div>
+</section>
 <section class="stats" id="systemInfo"><div class="stat"><strong id="statBodies">05</strong><span>CELESTIAL BODIES / 天体</span></div><div class="stat"><strong id="statMoons">08</strong><span>KNOWN MOONS / 衛星</span></div><div class="stat"><strong id="statHabitable">02</strong><span>HABITABLE ZONES / 居住圏</span></div><div class="stat"><strong id="statSpan">8.0 AU</strong><span>SYSTEM SPAN / 星系範囲</span></div></section>
 <section class="lower"><div class="panel" id="planetList"><div class="panelhead"><span>CELESTIAL REGISTER　/　天体目録</span><b id="listCount">05 ENTRIES</b></div><div class="list-wrap" id="bodyRows"></div></div><div class="panel"><div class="panelhead"><span>MISSION LOG　/　記録</span><b>LOCAL</b></div><div class="log" id="log"><div class="logline"><b>09:00:01</b> // Cartographic engine initialized.</div></div></div></section>
 </div></main></div><div class="toast" id="toast" role="status" aria-live="polite"></div><div id="modalRoot"></div>
