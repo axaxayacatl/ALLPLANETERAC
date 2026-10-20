@@ -54,9 +54,13 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .panelhead b{color:var(--red);font-weight:500}
 .map-panel{position:relative;min-height:540px;overflow:hidden;background:radial-gradient(ellipse at 50% 48%,#fff0f6 0%,#fffafa 58%,#fff 100%)}
 .map-panel:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#efb8cb33 1px,transparent 1px),linear-gradient(90deg,#efb8cb33 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(to bottom,#0008,transparent 94%);pointer-events:none}
-.map-topline{position:absolute;left:16px;top:15px;right:16px;display:flex;justify-content:space-between;gap:10px;font-size:9px;color:#a27a89;z-index:2}
+.map-panel>.panelhead{position:relative;z-index:3}
+.map-topline{position:absolute;top:55px;left:16px;right:16px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;column-gap:14px;font-size:9px;line-height:1.6;color:#a27a89;z-index:4;pointer-events:none}
+.map-topline>span{display:block;min-width:0}
+.map-topline>span:first-child{white-space:normal}
 .map-topline strong{color:var(--red);font-weight:500}
-.map-stage{position:absolute;inset:40px 10px 45px;display:grid;place-items:center}
+#mapCoord{justify-self:end;text-align:right;white-space:nowrap;max-width:100%;padding-left:5px;background:#fffafaad}
+.map-stage{position:absolute;inset:83px 10px 45px;display:grid;place-items:center}
 .map-stage svg{width:100%;height:100%;overflow:visible;touch-action:manipulation}
 .orbit{fill:none;stroke:#eab5c9;stroke-width:1}
 .orbit.selected{stroke:var(--red);stroke-dasharray:4 6;opacity:.8}
@@ -97,7 +101,6 @@ input[type=range]{padding:0;accent-color:var(--red)}
 .empty{padding:28px 8px;text-align:center;color:var(--muted);font-size:10px;line-height:1.8}
 .log{padding:14px;font-size:9px;line-height:1.9;color:#8c6b77;max-height:200px;overflow:auto}
 .logline{border-bottom:1px solid #f7e1e9;padding:6px 0}
-.logline b{font-weight:500;color:var(--red)}
 .hidden{display:none!important}
 .modal-backdrop{position:fixed;inset:0;background:#2b101dcc;display:grid;place-items:center;padding:18px;z-index:20}
 .modal{width:min(560px,100%);max-height:90vh;overflow:auto;background:var(--paper);border:1px solid var(--red);box-shadow:0 20px 80px #5c0b2b40}
@@ -108,7 +111,7 @@ input[type=range]{padding:0;accent-color:var(--red)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .mobile-nav{display:none}
 
-/* CHAPTGPT image panel */
+/* Preserve the original AI artwork panel and image behavior. */
 .chaptgpt-panel{margin-top:12px;overflow:hidden}
 .chaptgpt-image-link{display:block;background:#fff5f8}
 .chaptgpt-image{display:block;width:100%;height:auto;max-height:700px;object-fit:contain;object-position:center}
@@ -144,10 +147,17 @@ input[type=range]{padding:0;accent-color:var(--red)}
 .mobile-nav{display:flex;gap:5px;padding:8px 12px;border-bottom:1px solid var(--line);overflow:auto;background:#fff5f8}
 .mobile-nav .navitem{white-space:nowrap;width:auto;padding:9px 11px}
 .panelhead{padding:0 11px}
-.map-topline{left:11px;right:11px}
+.map-topline{left:11px;right:11px;top:55px;column-gap:8px;font-size:8px}
+.map-stage{inset:80px 8px 42px}
+#mapCoord{font-size:7px}
 .map-foot{left:11px;right:11px;font-size:7px}
 .planet-label{font-size:9px}
 .chaptgpt-caption{padding:9px 11px;font-size:8px}
+}
+@media(max-width:380px){
+.map-topline{grid-template-columns:minmax(0,1fr);row-gap:2px}
+#mapCoord{justify-self:start;text-align:left;padding-left:0}
+.map-stage{inset:91px 6px 42px}
 }
 </style>
 </head>
@@ -202,7 +212,10 @@ input[type=range]{padding:0;accent-color:var(--red)}
     <section class="workbench" id="mapSection">
       <div class="panel map-panel">
         <div class="panelhead"><span></span><b id="mapScale"></b></div>
-        <div class="map-topline"><span><strong></strong>　CLICK A BODY TO INSPECT</span><span id="mapCoord"></span></span></div>
+        <div class="map-topline">
+          <span><strong>●</strong> CLICK A BODY TO INSPECT</span>
+          <span id="mapCoord"></span>
+        </div>
         <div class="map-stage"><svg id="orbitSvg" viewBox="0 0 720 620" role="img" aria-label="Interactive solar system map"></svg></div>
         <div class="map-foot"><span>PLANETARY POSITIONS ARE SCHEMATIC</span><span>軌道データ / <b id="bodyCountFoot">05 BODIES</b></span></div>
       </div>
@@ -223,7 +236,7 @@ input[type=range]{padding:0;accent-color:var(--red)}
       </div>
     </section>
 
-    <!-- CHAPTGPT image: positioned below the planet chart and above the statistics -->
+    <!-- Original AI-generated artwork retained. -->
     <section class="panel chaptgpt-panel" id="chaptgptImage">
       <div class="panelhead">
         <span>CHAPTGPT / SAKURA FESTIVAL AMONG THE STARS</span>
@@ -298,18 +311,41 @@ function saveForm(){
 }
 function render(){renderMap();renderRows();renderStats();$('bodyCountFoot').textContent=String(system.bodies.length).padStart(2,'0')+' BODIES';$('listCount').textContent=String(system.bodies.length).padStart(2,'0')+' ENTRIES';$('systemCode').textContent=system.id||'AP—001';$('dateStamp').textContent='UPDATED '+new Date().toLocaleDateString('en-CA')}
 function renderMap(){
-  let svg=$('orbitSvg'),cx=360,cy=310,scale=31;
-  let max=Math.max(8,...system.bodies.map(b=>b.orbit));scale=Math.min(31,255/max);
+  const svg=$('orbitSvg'),cx=360,cy=310;
+  const max=Math.max(8,...system.bodies.map(b=>b.orbit));
+  const scale=Math.min(31,255/max);
   let html='';
-  for(let i=0;i<5;i++){let r=(i+1)*scale*max/5;html+=`<circle class="orbit" cx="${cx}" cy="${cy}" r="${r}"/>`}
+
+  for(let i=0;i<5;i++){
+    const r=(i+1)*scale*max/5;
+    html+=`<circle class="orbit" cx="${cx}" cy="${cy}" r="${r}"/>`;
+  }
+
   system.bodies.forEach((b,i)=>{
-    let angle=(-90+i*137.5)*Math.PI/180;let r=Math.max(10,b.orbit*scale);let x=cx+Math.cos(angle)*r,y=cy+Math.sin(angle)*r;let rad=Math.max(5,Math.min(25,6+b.size*4));
-    if(b.id===selectedId)html+=`<circle class="orbit selected" cx="${cx}" cy="${cy}" r="${b.orbit*scale}"/>`;
-    html+=`<g data-id="${esc(b.id)}" class="mapbody" style="cursor:pointer"><circle class="planet" cx="${x}" cy="${y}" r="${rad}" fill="${esc(b.color)}"/><text class="planet-label" x="${x+rad+7}" y="${y-2}">${esc(b.name)}</text><text class="planet-label jp" x="${x+rad+7}" y="${y+10}">${esc(b.jp||b.kind.toUpperCase())}</text></g>`;
+    const angle=(-90+i*137.5)*Math.PI/180;
+    const r=Math.max(10,b.orbit*scale);
+    const x=cx+Math.cos(angle)*r,y=cy+Math.sin(angle)*r;
+    const rad=Math.max(5,Math.min(25,6+b.size*4));
+
+    if(b.id===selectedId){
+      html+=`<circle class="orbit selected" cx="${cx}" cy="${cy}" r="${b.orbit*scale}"/>`;
+    }
+
+    html+=`<g data-id="${esc(b.id)}" class="mapbody" style="cursor:pointer">
+      <circle class="planet" cx="${x}" cy="${y}" r="${rad}" fill="${esc(b.color)}"/>
+      <text class="planet-label" x="${x+rad+7}" y="${y-2}">${esc(b.name)}</text>
+      <text class="planet-label jp" x="${x+rad+7}" y="${y+10}">${esc(b.jp||b.kind.toUpperCase())}</text>
+    </g>`;
   });
-  html+=`<circle cx="${cx}" cy="${cy}" r="13" fill="#ff174c" stroke="#fff" stroke-width="2"/><circle cx="${cx}" cy="${cy}" r="20" fill="none" stroke="#ff174c" stroke-opacity=".3"/>`;
-  svg.innerHTML=html;svg.querySelectorAll('.mapbody').forEach(g=>g.addEventListener('click',()=>select(g.dataset.id)));
-  $('mapScale').textContent='MAP 01 : '+max.toFixed(1)+' AU';$('mapCoord').textContent='SECTOR '+String(system.bodies.length).padStart(2,'0')+' / 08';
+
+  html+=`<circle cx="${cx}" cy="${cy}" r="13" fill="#ff174c" stroke="#fff" stroke-width="2"/>
+    <circle cx="${cx}" cy="${cy}" r="20" fill="none" stroke="#ff174c" stroke-opacity=".3"/>`;
+
+  svg.innerHTML=html;
+  svg.querySelectorAll('.mapbody').forEach(g=>g.addEventListener('click',()=>select(g.dataset.id)));
+
+  $('mapScale').textContent='MAP 01 : '+max.toFixed(1)+' AU';
+  $('mapCoord').textContent='SECTOR '+String(system.bodies.length).padStart(2,'0')+' / 08';
 }
 function renderRows(){
   $('bodyRows').innerHTML=system.bodies.length?system.bodies.slice().sort((a,b)=>a.orbit-b.orbit).map(b=>`<div class="planet-row" data-id="${esc(b.id)}"><div class="mini-planet" style="background:radial-gradient(circle at 30% 25%,white,${esc(b.color)},#b51d4b20)"></div><div><div class="row-name">${esc(b.name)} <span style="color:#b98a9d;font-weight:400">${esc(b.jp||'')}</span></div><div class="row-sub">${esc(b.kind.toUpperCase())}　/　${Number(b.orbit).toFixed(1)} AU　/　${esc(b.temp)}°C</div></div><div class="row-type">${b.id===selectedId?'● ACTIVE':'↗ INSPECT'}</div></div>`).join(''):'<div class="empty">NO CELESTIAL BODIES / 天体がありません<br>ADD A BODY TO BEGIN CARTOGRAPHY.</div>';
@@ -397,7 +433,7 @@ render();loadForm(body());log('Orbital cartography loaded');
 </script>
 
 <script>
-// Load the two first image assets from the project's imageka folder.
+// Original sidebar artwork loader retained.
 (async function loadSidebarArtwork(){
   const api='https://api.github.com/repos/axaxayacatl/ALLPLANETERAC/contents/imageka_allplaneterac?ref=main';
   const imgs=[...document.querySelectorAll('.sidebar-art img')];
