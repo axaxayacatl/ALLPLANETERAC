@@ -190,7 +190,7 @@ input[type=range]{padding:0;accent-color:var(--red)}
     <section class="masthead">
       <div>
         <div class="eyebrow">ALL PLANETERAC / WORLD ENGINE</div>
-        <h1>PLANET<span>ERAC</span></h1>
+        <h1>All PLANET<span>ERAC</span></h1>
         <div class="jp">惑星系を設計する。／ DESIGN A SOLAR SYSTEM.</div>
       </div>
       <div class="mast-right">
@@ -202,7 +202,7 @@ input[type=range]{padding:0;accent-color:var(--red)}
     <section class="workbench" id="mapSection">
       <div class="panel map-panel">
         <div class="panelhead"><span>ORBITAL CARTOGRAPHY　/　軌道地図</span><b id="mapScale">MAP 01 : 1 AU</b></div>
-        <div class="map-topline"><span><strong>● LIVE MAP</strong>　CLICK A BODY TO INSPECT</span><span id="mapCoord">SECTOR 00 / 00</span></div>
+
         <div class="map-stage"><svg id="orbitSvg" viewBox="0 0 720 620" role="img" aria-label="Interactive solar system map"></svg></div>
         <div class="map-foot"><span>PLANETARY POSITIONS ARE SCHEMATIC</span><span>軌道データ / <b id="bodyCountFoot">05 BODIES</b></span></div>
       </div>
@@ -397,7 +397,6 @@ render();loadForm(body());log('Orbital cartography loaded');
 </script>
 
 <script>
-// Load the two first image assets from the project's imageka folder.
 (async function loadSidebarArtwork(){
   const api='https://api.github.com/repos/axaxayacatl/ALLPLANETERAC/contents/imageka_allplaneterac?ref=main';
   const imgs=[...document.querySelectorAll('.sidebar-art img')];
@@ -421,5 +420,4 @@ render();loadForm(body());log('Orbital cartography loaded');
 </script>
 </body>
 </html>
- <-- finish the function and fix overlapping text
 
